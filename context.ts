@@ -200,8 +200,7 @@ export class XMLParseContext {
     }
 }
 
-// deno-lint-ignore no-explicit-any
-export type XMLParseEvent = [string, ...any[]];
+export type XMLParseEvent = [string, ...unknown[]];
 
 export interface XMLParseHandler {
     (cx: XMLParseContext, c: string): XMLParseEvent[];

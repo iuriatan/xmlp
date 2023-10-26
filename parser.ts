@@ -293,22 +293,24 @@ export class PullParser extends ParserBase {
         const name = event[0];
         const result: PullResult = { name };
         if (name === 'processing_instruction') {
-            result['procInst'] = event[1];
+            result['procInst'] = event[1] as string;
         } else if (name === 'sgml_declaration') {
-            result['sgmlDecl'] = event[1];
+            result['sgmlDecl'] = event[1] as string;
         } else if (name === 'text') {
-            result['text'] = event[1];
-            result['element'] = event[2];
-            result['cdata'] = event[3];
+            result['text'] = event[1] as string;
+            result['element'] = event[2] as ElementInfo;
+            result['cdata'] = event[3] as boolean;
         } else if (name === 'doctype') {
-            result['doctype'] = event[1];
+            result['doctype'] = event[1] as string;
         } else if (name === 'start_prefix_mapping' || name === 'end_prefix_mapping') {
-            result['ns'] = event[1];
-            result['uri'] = event[2];
+            result['ns'] = event[1] as string;
+            result['uri'] = event[2] as string;
         } else if (name === 'start_element' || name === 'end_element') {
-            result['element'] = event[1];
+            result['element'] = event[1] as ElementInfo;
         } else if (name === 'comment') {
-            result['comment'] = event[1];
+            result['comment'] = event[1] as string;
+        } else if (name === 'header') {
+            result['header'] = event[1] as string;
         }
         return result;
     }
