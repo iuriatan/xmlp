@@ -146,12 +146,21 @@ export class XMLParseContext {
     private _memento = '';
     private _elementStack: Element[] = [];
     private _namespaces: { [ns: string]: string | undefined } = {};
+    private _collectHeader = false;
 
     quote: '' | '"' | '\'' = '';
     state = 'BEFORE_DOCUMENT';
 
     constructor(locator?: XMLLocator) {
         this._locator = locator;
+    }
+
+    setOption({ collectHeader }: ParserOptions) {
+        this._collectHeader = collectHeader;
+    }
+    
+    get options(): ParserOptions {
+        return { collectHeader: this._collectHeader };
     }
 
     get position(): XMLPosition {
@@ -224,4 +233,8 @@ export class XMLParseError extends Error {
     get column(): number {
         return this._position.column;
     }
+}
+
+export type ParserOptions = {
+    collectHeader: boolean;
 }

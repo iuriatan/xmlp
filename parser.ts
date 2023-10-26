@@ -8,6 +8,7 @@ import {
     XMLLocator,
     XMLPosition,
     ElementInfo,
+    ParserOptions,
 } from './context.ts';
 
 import {
@@ -157,6 +158,7 @@ export interface SAXEvent {
     end_prefix_mapping: (ns: string, uri: string) => void;
     end_document: () => void;
     error: (error: XMLParseError) => void;
+    header: (header: string) => void;
 }
 
 /**
@@ -167,6 +169,11 @@ export class SAXParser extends ParserBase implements UnderlyingSink<Uint8Array> 
     private _listeners: { [name: string]: ((...arg: any[]) => void)[] } = {};
     private _controller?: WritableStreamDefaultController;
     private _encoding?: string;
+
+    constructor({ collectHeader = false }: Partial<ParserOptions> = {}) {
+        super();
+        this.cx.setOption({collectHeader});
+    }
 
     protected fireListeners(event: XMLParseEvent) {
         const [name, ...args] = event;
@@ -283,6 +290,7 @@ export interface PullResult {
     uri?: string;
     comment?: string;
     error?: XMLParseError;
+    header?: string;
 }
 
 /**

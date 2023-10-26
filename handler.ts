@@ -34,8 +34,19 @@ export function resolveEntity(text: string): string {
 
 // BEFORE_DOCUMENT; FOUND_LT, Error
 export function handleBeforeDocument(cx: XMLParseContext, c: string): XMLParseEvent[] {
+    const { collectHeader } = cx.options;
+
     if (c === '<') {
         cx.state = 'FOUND_LT';
+        const header = cx.memento;
+        if (header) {
+            cx.clearMemento();
+            return [['header', header]];
+        }
+    }
+
+    if (collectHeader) {
+        cx.appendMemento(c)
     } else {
         if (!isWhitespace(c)) {
             throw new XMLParseError('Non-whitespace before document.', cx);
